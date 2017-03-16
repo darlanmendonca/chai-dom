@@ -18,7 +18,7 @@
       desc = Array.prototype.slice.call(el, 0, 5).map(elToString).join(', ')
       return el.length > 5 ? desc + '... (+' + (el.length - 5) + ' more)' : desc
     }
-    if (!(el instanceof HTMLElement)) {
+    if (!HTMLElement && !(el instanceof HTMLElement)) {
       return String(el)
     }
 
@@ -180,7 +180,7 @@
   chai.Assertion.overwriteProperty('empty', function(_super) {
     return function() {
       var obj = flag(this, 'object')
-      if (obj instanceof HTMLElement) {
+      if (HTMLElement && obj instanceof HTMLElement) {
         this.assert(
           obj.children.length === 0
           , 'expected ' + elToString(obj) + ' to be empty'
@@ -200,7 +200,7 @@
     function(_super) {
       return function(length) {
         var obj = flag(this, 'object')
-        if (obj instanceof NodeList || obj instanceof HTMLElement) {
+        if (obj instanceof NodeList || (HTMLElement && obj instanceof HTMLElement)) {
           var actualLength = obj.children ? obj.children.length : obj.length;
           this.assert(
               actualLength === length
@@ -225,7 +225,7 @@
   chai.Assertion.overwriteMethod('match', function(_super) {
     return function(selector) {
       var obj = flag(this, 'object')
-      if (obj instanceof HTMLElement) {
+      if (HTMLElement && obj instanceof HTMLElement) {
         this.assert(
           obj.matches(selector)
           , 'expected ' + elToString(obj) + ' to match #{exp}'
@@ -249,7 +249,7 @@
     function(_super) {
       return function(subitem) {
         var obj = flag(this, 'object')
-        if (obj instanceof HTMLElement) {
+        if (HTMLElement && obj instanceof HTMLElement) {
           if (typeof subitem === 'string') {
             this.assert(
               !!obj.querySelector(subitem)
